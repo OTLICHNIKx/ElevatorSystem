@@ -96,7 +96,7 @@ namespace ElevatorSystemTest
         {
             if (floorCount <= 12)
                 return random.Next(100) < 95 ? random.Next(0, 6) : random.Next(7, 9);
-            else return random.Next(100) < 95 ? random.Next(12, 15) : random.Next(9, 11);
+            else return random.Next(100) < 95 ? random.Next(0, 9) : random.Next(9, 11);
         }
 
         public void DisplayInfo()

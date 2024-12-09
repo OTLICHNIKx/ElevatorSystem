@@ -14,6 +14,7 @@ namespace ElevatorSystemTest
         public int TargetFloor { get; set; } // Целевой этаж (для направления движения)
         public string Type => Capacity <= 4 ? "Пассажирский" : "Грузовой"; // Тип лифта
         public int Load { get; set; } // Начальная загрузка
+        private static Random Random = new Random(); // Статический объект Random для использования в классе
         public Elevator(int number, int capacity, int floorCount)
         {
             Number = number;
@@ -26,13 +27,19 @@ namespace ElevatorSystemTest
         {
             if (CurrentFloor != targetFloor)
             {
+                // Разница между этажами
+                int floorDifference = Math.Abs(CurrentFloor - targetFloor);
+                // Генерация случайного времени на один этаж (в пределах от 1.7 до 2.5 секунд)
+                double timePerFloor = Random.NextDouble() * (2.5 - 1.7) + 1.7;
+                // Общее время = время на этаж * количество этажей
+                double timeToMove = timePerFloor * floorDifference;
                 if (CurrentFloor < targetFloor)
                 {
-                    Console.WriteLine($"Лифт №{Number} ({Type}) движется с {CurrentFloor} на этаж {targetFloor} (вверх).");
+                    Console.WriteLine($"Лифт №{Number} ({Type}) движется с {CurrentFloor} на этаж {targetFloor} (вверх). Время в пути: {timeToMove:F1} секунд.");
                 }
                 else
                 {
-                    Console.WriteLine($"Лифт №{Number} ({Type}) движется с {CurrentFloor} на этаж {targetFloor} (вниз).");
+                    Console.WriteLine($"Лифт №{Number} ({Type}) движется с {CurrentFloor} на этаж {targetFloor} (вниз). Время в пути: {timeToMove:F1} секунд.");
                 }
                 CurrentFloor = targetFloor;
             }
