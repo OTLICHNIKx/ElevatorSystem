@@ -55,7 +55,40 @@ namespace ElevatorSystemTest
                 if (closestElevator != null)
                 {
                     closestElevator.MoveToFloor(passenger.CurrentFloor); // Лифт едет на текущий этаж пассажира
-                    closestElevator.PickUpPassenger(Elevators, passenger.CurrentFloor); // Пассажир садится в лифт
+                    closestElevator.PickUpPassenger(Passengers, Elevators, passenger.CurrentFloor); // Пассажир садится в лифт
+                }
+            }
+
+            // Теперь обрабатываем пассажиров с учётом направления движения лифта
+            foreach (var elevator in Elevators)
+            {
+                // Если лифт движется вниз
+                if (elevator.CurrentFloor > elevator.TargetFloor)
+                {
+                    var passengersGoingDown = Passengers
+                        .Where(p => p.CurrentFloor > elevator.CurrentFloor)
+                        .OrderByDescending(p => p.CurrentFloor) // Пассажиры по убыванию этажей
+                        .ToList();
+
+                    foreach (var passenger in passengersGoingDown)
+                    {
+                        elevator.MoveToFloor(passenger.CurrentFloor); // Лифт едет на этаж пассажира
+                        elevator.PickUpPassenger(Passengers, Elevators, passenger.CurrentFloor); // Пассажир садится в лифт
+                    }
+                }
+                // Если лифт движется вверх
+                else if (elevator.CurrentFloor < elevator.TargetFloor)
+                {
+                    var passengersGoingUp = Passengers
+                        .Where(p => p.CurrentFloor > elevator.CurrentFloor)
+                        .OrderBy(p => p.CurrentFloor) // Пассажиры по возрастанию этажей
+                        .ToList();
+
+                    foreach (var passenger in passengersGoingUp)
+                    {
+                        elevator.MoveToFloor(passenger.CurrentFloor); // Лифт едет на этаж пассажира
+                        elevator.PickUpPassenger(Passengers, Elevators, passenger.CurrentFloor); // Пассажир садится в лифт
+                    }
                 }
             }
         }
@@ -63,7 +96,7 @@ namespace ElevatorSystemTest
         {
             if (floorCount <= 12)
                 return random.Next(100) < 95 ? random.Next(0, 6) : random.Next(7, 9);
-            else return random.Next(100) < 95 ? random.Next(0, 9) : random.Next(9, 11);
+            else return random.Next(100) < 95 ? random.Next(12, 15) : random.Next(9, 11);
         }
 
         public void DisplayInfo()
