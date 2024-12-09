@@ -1,0 +1,15 @@
+C:\Labs\ElevatorPart3\Elevator\ElevatorSystem\ElevatorSystemTest\ElevatorSystemTest\bin\Debug\net8.0\ElevatorSystemTest.exe
+C:\Labs\ElevatorPart3\Elevator\ElevatorSystem\ElevatorSystemTest\ElevatorSystemTest\bin\Debug\net8.0\ElevatorSystemTest.deps.json
+C:\Labs\ElevatorPart3\Elevator\ElevatorSystem\ElevatorSystemTest\ElevatorSystemTest\bin\Debug\net8.0\ElevatorSystemTest.runtimeconfig.json
+C:\Labs\ElevatorPart3\Elevator\ElevatorSystem\ElevatorSystemTest\ElevatorSystemTest\bin\Debug\net8.0\ElevatorSystemTest.dll
+C:\Labs\ElevatorPart3\Elevator\ElevatorSystem\ElevatorSystemTest\ElevatorSystemTest\bin\Debug\net8.0\ElevatorSystemTest.pdb
+C:\Labs\ElevatorPart3\Elevator\ElevatorSystem\ElevatorSystemTest\ElevatorSystemTest\obj\Debug\net8.0\ElevatorSystemTest.GeneratedMSBuildEditorConfig.editorconfig
+C:\Labs\ElevatorPart3\Elevator\ElevatorSystem\ElevatorSystemTest\ElevatorSystemTest\obj\Debug\net8.0\ElevatorSystemTest.AssemblyInfoInputs.cache
+C:\Labs\ElevatorPart3\Elevator\ElevatorSystem\ElevatorSystemTest\ElevatorSystemTest\obj\Debug\net8.0\ElevatorSystemTest.AssemblyInfo.cs
+C:\Labs\ElevatorPart3\Elevator\ElevatorSystem\ElevatorSystemTest\ElevatorSystemTest\obj\Debug\net8.0\ElevatorSystemTest.csproj.CoreCompileInputs.cache
+C:\Labs\ElevatorPart3\Elevator\ElevatorSystem\ElevatorSystemTest\ElevatorSystemTest\obj\Debug\net8.0\ElevatorSystemTest.sourcelink.json
+C:\Labs\ElevatorPart3\Elevator\ElevatorSystem\ElevatorSystemTest\ElevatorSystemTest\obj\Debug\net8.0\ElevatorSystemTest.dll
+C:\Labs\ElevatorPart3\Elevator\ElevatorSystem\ElevatorSystemTest\ElevatorSystemTest\obj\Debug\net8.0\refint\ElevatorSystemTest.dll
+C:\Labs\ElevatorPart3\Elevator\ElevatorSystem\ElevatorSystemTest\ElevatorSystemTest\obj\Debug\net8.0\ElevatorSystemTest.pdb
+C:\Labs\ElevatorPart3\Elevator\ElevatorSystem\ElevatorSystemTest\ElevatorSystemTest\obj\Debug\net8.0\ElevatorSystemTest.genruntimeconfig.cache
+C:\Labs\ElevatorPart3\Elevator\ElevatorSystem\ElevatorSystemTest\ElevatorSystemTest\obj\Debug\net8.0\ref\ElevatorSystemTest.dll
