@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Labs\\ElevatorPart3\\Elevator\\Elevator\\Elevator.csproj": {}
+    "C:\\Labs\\ElevatorPart3\\Elevator\\ElevatorSystem\\Elevator.csproj": {}
   },
   "projects": {
-    "C:\\Labs\\ElevatorPart3\\Elevator\\Elevator\\Elevator.csproj": {
+    "C:\\Labs\\ElevatorPart3\\Elevator\\ElevatorSystem\\Elevator.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Labs\\ElevatorPart3\\Elevator\\Elevator\\Elevator.csproj",
+        "projectUniqueName": "C:\\Labs\\ElevatorPart3\\Elevator\\ElevatorSystem\\Elevator.csproj",
         "projectName": "Elevator",
-        "projectPath": "C:\\Labs\\ElevatorPart3\\Elevator\\Elevator\\Elevator.csproj",
+        "projectPath": "C:\\Labs\\ElevatorPart3\\Elevator\\ElevatorSystem\\Elevator.csproj",
         "packagesPath": "C:\\Users\\Николай\\.nuget\\packages\\",
-        "outputPath": "C:\\Labs\\ElevatorPart3\\Elevator\\Elevator\\obj\\",
+        "outputPath": "C:\\Labs\\ElevatorPart3\\Elevator\\ElevatorSystem\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Николай\\AppData\\Roaming\\NuGet\\NuGet.Config",

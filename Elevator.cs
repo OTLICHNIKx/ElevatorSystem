@@ -40,176 +40,90 @@ namespace ElevatorSystem
                 Console.WriteLine($"Лифт №{Number} добавил запрос на этаж {destinationFloor}.");
             }
         }
-
+        private void AddPassengers(int floor, int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                if (CurrentPassengers < Capacity)
+                {
+                    var targetFloor = random.Next(1, 21); // Предположим, 20 этажей
+                    Passengers.Add(new Passenger(floor, targetFloor));
+                    Console.WriteLine($"Лифт №{Number} добавил пассажира с целью на этаж {targetFloor}.");
+                    CurrentPassengers++;
+                }
+                else
+                {
+                    Console.WriteLine($"Лифт №{Number} заполнен. Нельзя добавить больше пассажиров.");
+                }
+            }
+        }
         // Обработка запросов лифта
         public void ProcessRequests(Dictionary<int, int> passengersOnFloors)
         {
-            // 1. Собираем этажи, на которых есть пассажиры для текущего лифта
-            var currentFloors = passengersOnFloors.Where(p => p.Value > 0 && Requests.Contains(p.Key)).Select(p => p.Key).ToList();
+            var currentFloors = passengersOnFloors.Where(p => p.Value > 0 && Requests.Contains(p.Key))
+                                                  .Select(p => p.Key)
+                                                  .OrderBy(f => f)
+                                                  .ToList();
 
             if (currentFloors.Count == 0)
             {
                 Console.WriteLine("Нет пассажиров на этажах. Лифт завершил обработку.");
-                return; // Нет пассажиров, лифт завершает работу
+                return;
             }
 
-            // 2. Находим максимальный этаж среди текущих этажей
-            int targetFloor = currentFloors.Max();
-
-            // 3. Пассажиры не должны повторно добавляться на лифт, если этаж уже был обработан
             var visitedFloors = new HashSet<int>();
 
-            // 4. Сначала едем на максимальный этаж
-            Console.WriteLine($"Лифт №{Number} едет на {targetFloor} этаж...");
-            visitedFloors.Add(targetFloor);
-
-            // Пассажиры, которые находятся на текущем этаже лифта, входят в лифт
-            var enteringPassengers = passengersOnFloors.ContainsKey(targetFloor) ? passengersOnFloors[targetFloor] : 0;
-            if (enteringPassengers > 0)
+            // Основная обработка запросов
+            foreach (var currentTarget in currentFloors)
             {
-                AddPassengers(targetFloor, enteringPassengers);
-                passengersOnFloors[targetFloor] -= enteringPassengers;
-            }
-
-            // Переезжаем на максимальный этаж
-            CurrentFloor = targetFloor;
-
-            // 5. Теперь двигаемся вниз, если есть запросы на этажи ниже
-            var downRequests = Requests.Where(r => r < CurrentFloor).OrderByDescending(r => r).ToList();
-
-            foreach (var downRequest in downRequests)
-            {
-                if (!visitedFloors.Contains(downRequest))
+                while (CurrentFloor != currentTarget)
                 {
-                    Console.WriteLine($"Лифт №{Number} едет на {downRequest} этаж...");
-                    visitedFloors.Add(downRequest);
-                    CurrentFloor = downRequest;
+                    // Проверяем, есть ли желаемый этаж между текущим положением и следующим целевым этажом
+                    var desiredInPath = Passengers.Where(p =>
+                                            (p.TargetFloor > CurrentFloor && p.TargetFloor <= currentTarget) ||
+                                            (p.TargetFloor < CurrentFloor && p.TargetFloor >= currentTarget))
+                                                  .OrderBy(p => Math.Abs(p.TargetFloor - CurrentFloor))
+                                                  .FirstOrDefault();
 
-                    // На этом этапе лифт уже забрал всех пассажиров на текущем этаже, можно начинать высадку
-                    var exitingPassengers = Passengers.Where(p => p.TargetFloor == downRequest).ToList();
-                    if (exitingPassengers.Count > 0)
+                    if (desiredInPath != null)
                     {
-                        Console.WriteLine($"Лифт №{Number} высадил {exitingPassengers.Count} пассажиров на {downRequest} этаже.");
-                        foreach (var passenger in exitingPassengers)
+                        // Едем на ближайший желаемый этаж
+                        Console.WriteLine($"Лифт №{Number} едет на желаемый этаж {desiredInPath.TargetFloor}...");
+                        CurrentFloor = desiredInPath.TargetFloor;
+                        Console.WriteLine($"Лифт №{Number} приехал на {CurrentFloor} этаж (желаемый для пассажира).");
+
+                        // Высаживаем пассажиров
+                        var exitingPassengers = Passengers.Where(p => p.TargetFloor == CurrentFloor).ToList();
+                        if (exitingPassengers.Count > 0)
                         {
-                            Passengers.Remove(passenger); // Удаляем пассажира из лифта
-                            Console.WriteLine($"Пассажир с целью на этаж {downRequest} выходит из лифта.");
+                            Console.WriteLine($"Лифт №{Number} высадил {exitingPassengers.Count} пассажиров на {CurrentFloor} этаже.");
+                            foreach (var passenger in exitingPassengers)
+                            {
+                                Passengers.Remove(passenger);
+                                Console.WriteLine($"Пассажир с целью на этаж {CurrentFloor} выходит из лифта.");
+                            }
                         }
                     }
-
-                    // Пассажиры могут входить на этажах
-                    var entering = passengersOnFloors.ContainsKey(downRequest) ? passengersOnFloors[downRequest] : 0;
-                    if (entering > 0)
+                    else
                     {
-                        AddPassengers(downRequest, entering);
-                        passengersOnFloors[downRequest] -= entering;
-                    }
-                }
-            }
+                        // Если нет подходящих желаемых этажей, едем на текущий целевой этаж
+                        Console.WriteLine($"Лифт №{Number} едет на {currentTarget} этаж...");
+                        CurrentFloor = currentTarget;
+                        Console.WriteLine($"Лифт №{Number} приехал на {CurrentFloor} этаж (текущий целевой).");
 
-            // 6. Теперь двигаемся вверх по запросам
-            var upRequests = Requests.Where(r => r > CurrentFloor).OrderBy(r => r).ToList();
-
-            foreach (var upRequest in upRequests)
-            {
-                if (!visitedFloors.Contains(upRequest))
-                {
-                    Console.WriteLine($"Лифт №{Number} едет на {upRequest} этаж...");
-                    visitedFloors.Add(upRequest);
-                    CurrentFloor = upRequest;
-
-                    // На этом этапе лифт уже забрал всех пассажиров на текущем этаже, можно начинать высадку
-                    var exitingUpPassengers = Passengers.Where(p => p.TargetFloor == upRequest).ToList();
-                    if (exitingUpPassengers.Count > 0)
-                    {
-                        Console.WriteLine($"Лифт №{Number} высадил {exitingUpPassengers.Count} пассажиров на {upRequest} этаже.");
-                        foreach (var passenger in exitingUpPassengers)
+                        // Добавляем новых пассажиров
+                        if (passengersOnFloors.ContainsKey(currentTarget))
                         {
-                            Passengers.Remove(passenger); // Удаляем пассажира из лифта
-                            Console.WriteLine($"Пассажир с целью на этаж {upRequest} выходит из лифта.");
+                            AddPassengers(currentTarget, passengersOnFloors[currentTarget]);
+                            passengersOnFloors[currentTarget] = 0;
                         }
                     }
-
-                    // Пассажиры могут входить на этажах
-                    var enteringUp = passengersOnFloors.ContainsKey(upRequest) ? passengersOnFloors[upRequest] : 0;
-                    if (enteringUp > 0)
-                    {
-                        AddPassengers(upRequest, enteringUp);
-                        passengersOnFloors[upRequest] -= enteringUp;
-                    }
                 }
+                visitedFloors.Add(currentTarget);
             }
 
-            // Итоговый вывод состояния
-            Console.WriteLine($"\nЛифт №{Number} завершил обработку запросов.");
-            Console.WriteLine($"Текущий этаж: {CurrentFloor}, Пассажиров в лифте: {CurrentPassengers}.\n");
+            Console.WriteLine("Обработка запросов завершена.");
         }
-
-
-        private void ProcessDirection(List<int> sortedRequests, Dictionary<int, int> passengersOnFloors, bool isGoingUp)
-        {
-            foreach (var targetFloor in sortedRequests)
-            {
-                // Лифт едет на этаж назначения
-                Console.WriteLine($"Лифт №{Number} едет на {targetFloor} этаж...");
-
-                // 1. Пассажиры, которые находятся на текущем этаже лифта, входят в лифт
-                if (CurrentFloor == targetFloor)
-                {
-                    var enteringPassengers = passengersOnFloors.ContainsKey(CurrentFloor) ? passengersOnFloors[CurrentFloor] : 0;
-                    if (enteringPassengers > 0)
-                    {
-                        AddPassengers(CurrentFloor, enteringPassengers);
-                        passengersOnFloors[CurrentFloor] -= enteringPassengers;
-                    }
-                }
-
-                // Переезжаем на желаемый этаж
-                CurrentFloor = targetFloor;
-
-                // 2. Высадка пассажиров
-                var exitingPassengers = Passengers.Where(p => p.TargetFloor == targetFloor).ToList();
-                if (exitingPassengers.Count > 0)
-                {
-                    Console.WriteLine($"Лифт №{Number} высадил {exitingPassengers.Count} пассажиров на {targetFloor} этаже.");
-                    foreach (var passenger in exitingPassengers)
-                    {
-                        Passengers.Remove(passenger); // Удаляем пассажира из лифта
-                        Console.WriteLine($"Пассажир с целью на этаж {targetFloor} выходит из лифта.");
-                    }
-                }
-
-                // 3. Пассажиры могут входить на этажах, если лифт не на целевом этаже
-                if (CurrentFloor != targetFloor)
-                {
-                    var enteringPassengers = passengersOnFloors.ContainsKey(CurrentFloor) ? passengersOnFloors[CurrentFloor] : 0;
-                    if (enteringPassengers > 0)
-                    {
-                        AddPassengers(CurrentFloor, enteringPassengers);
-                        passengersOnFloors[CurrentFloor] -= enteringPassengers;
-                    }
-                }
-
-                // Обновляем текущее количество пассажиров после высадки
-                CurrentPassengers = Passengers.Count;
-            }
-        }
-
-
-        private void AddPassengers(int targetFloor, int passengersToEnter)
-        {
-            int availableSpace = Capacity - CurrentPassengers;
-            int enteringPassengersCount = Math.Min(availableSpace, passengersToEnter);
-
-            for (int i = 0; i < enteringPassengersCount; i++)
-            {
-                Passengers.Add(new Passenger(targetFloor)); // Добавляем пассажира с нужным этажом назначения
-            }
-
-            CurrentPassengers += enteringPassengersCount;
-            Console.WriteLine($"Лифт №{Number} теперь содержит {CurrentPassengers} пассажиров.");
-        }
-
         public override string ToString()
         {
             return $"Лифт №{Number} ({Type}), Вместимость: {Capacity} человек, Текущий этаж: {CurrentFloor}, Пассажиров: {CurrentPassengers}";

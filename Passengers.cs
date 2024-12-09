@@ -9,12 +9,12 @@ public class Passenger
 {
     public int TargetFloor { get; set; }
     public int CurrentFloor { get; set; }
+    public int StartingFloor { get; }
     public int Id { get; set; }
     private static int _counter = 0;
-    public Passenger(int targetFloor, int currentFloor = 0)
+    public Passenger(int startingFloor, int targetFloor)
     {
+        StartingFloor = startingFloor;
         TargetFloor = targetFloor;
-        CurrentFloor = currentFloor;
-        Id = ++_counter;
     }
 }
