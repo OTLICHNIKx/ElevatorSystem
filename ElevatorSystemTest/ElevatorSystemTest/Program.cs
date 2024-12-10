@@ -1,4 +1,5 @@
 ﻿using ElevatorSystemTest;
+using System.IO;
 
 public class Program
 {
@@ -11,29 +12,30 @@ public class Program
             Console.WriteLine("Установка лифтов для здания меньше 6 этажей не является разумной.");
             return;
         }
-
         Console.Write("Введите количество лифтов (с 1 по 4): ");
         int elevatorCount = GetValidInput(1, 4);
 
-        Building building = new Building(floorCount);
-
-        // Добавляем лифты
-        for (int i = 1; i <= elevatorCount; i++)
+        // Создаем и открываем файл для записи
+        using (StreamWriter writer = new StreamWriter("simulation_output.txt"))
         {
-            int capacity = (i == elevatorCount || (elevatorCount >= 3 && i >= elevatorCount - 1)) ? 10 : 4;
-            building.AddElevator(new Elevator(i, capacity, floorCount));
+            Building building = new Building(floorCount, writer);
+
+            // Добавляем лифты
+            for (int i = 1; i <= elevatorCount; i++)
+            {
+                int capacity = (i == elevatorCount || (elevatorCount >= 3 && i >= elevatorCount - 1)) ? 10 : 4;
+                building.AddElevator(new Elevator(i, capacity, floorCount, writer));
+            }
+
+            Console.WriteLine("Введите количество часов работы лифта:");
+            int hours = int.Parse(Console.ReadLine());
+
+            // Передаем writer в симуляцию
+            ElevatorSimulation simulation = new ElevatorSimulation(building, writer);
+            simulation.StartSimulation(hours); // Запуск симуляции
+            Console.WriteLine("Все данные записаны в файле");
+            Console.WriteLine("Все данные о работе лифта записаны в файл simulation_output.txt");
         }
-
-        building.DisplayInfo();
-
-
-        building.GeneratePassengers(building.GeneratePassengerCount(floorCount));
-
-        Console.WriteLine("\nРаспределение работы лифтов:");
-        building.DispatchElevators();
-
-        Console.Write("\n");
-        building.DisplayInfo();
     }
 
     private static int GetValidInput(int min, int max)

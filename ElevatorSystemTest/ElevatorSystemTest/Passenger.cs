@@ -29,7 +29,7 @@ namespace ElevatorSystemTest
 
         public override string ToString()
         {
-            return $"Пассажир {Id}: Текущий этаж - {CurrentFloor}, Желаемый этаж - {DesiredFloor}, , Доставлен: {IsDelivered}";
+            return $"Пассажир {Id}: Текущий этаж - {CurrentFloor}, Желаемый этаж - {DesiredFloor}.";
         }
     }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,26 +9,29 @@ namespace ElevatorSystemTest
 {
     public class Building
     {
-        public int FloorCount { get; set;} // Количество этажей
+        public int FloorCount { get; set; } // Количество этажей
         private int passengerIdCounter = 1; // Глобальный счетчик пассажиров
         public List<Elevator> Elevators { get; set; } // Список лифтов
         private Random random = new Random(); // Генератор случайных чисел
         public List<Passenger> Passengers { get; private set; } = new List<Passenger>();
-        public Building(int floorCount)
+        private StreamWriter writer; // Добавление StreamWriter
+
+        public Building(int floorCount, StreamWriter writer)
         {
             FloorCount = floorCount;
             Elevators = new List<Elevator>();
+            this.writer = writer;
         }
 
         public void AddElevator(Elevator elevator)
         {
             Elevators.Add(elevator);
         }
+
         // Генерация пассажиров с правильными текущими этажами
         public void GeneratePassengers(int count)
         {
             Passengers.Clear();
-            Random random = new Random();
             for (int i = 0; i < count; i++)
             {
                 int currentFloor = random.Next(1, FloorCount + 1);
@@ -44,10 +48,10 @@ namespace ElevatorSystemTest
                 });
             }
 
-            Console.WriteLine("Сгенерированы пассажиры:");
+            writer.WriteLine("Сгенерированы пассажиры:");
             foreach (var passenger in Passengers)
             {
-                Console.WriteLine(passenger);
+                writer.WriteLine(passenger);
             }
         }
 
@@ -60,7 +64,7 @@ namespace ElevatorSystemTest
                 .Distinct()
                 .OrderBy(f => f);
 
-            Console.WriteLine($"ТЕКУЩИЕ ЭТАЖИ (пассажиры ждут лифт): {string.Join(", ", currentFloors)}");
+            writer.WriteLine($"ТЕКУЩИЕ ЭТАЖИ (пассажиры ждут лифт): {string.Join(", ", currentFloors)}");
 
             foreach (var passenger in Passengers.Where(p => !p.IsPickedUp && !p.IsDelivered).ToList())
             {
@@ -81,32 +85,33 @@ namespace ElevatorSystemTest
             {
                 if (elevator.Passengers.Any(p => !p.IsDelivered))
                 {
-                    Console.WriteLine($"Перед обработкой: Лифт №{elevator.Number}, ЖЕЛАЕМЫЕ ЭТАЖИ: {string.Join(", ", elevator.Passengers.Select(p => p.DesiredFloor).Distinct().OrderBy(f => f))}");
+                    writer.WriteLine($"Перед обработкой: Лифт №{elevator.Number}, ЖЕЛАЕМЫЕ ЭТАЖИ: {string.Join(", ", elevator.Passengers.Select(p => p.DesiredFloor).Distinct().OrderBy(f => f))}");
                     elevator.DeliverPassengers();
-                    Console.WriteLine($"После обработки: Лифт №{elevator.Number}, Загрузка: {elevator.Load}/{elevator.Capacity}");
+                    writer.WriteLine($"После обработки: Лифт №{elevator.Number}, Загрузка: {elevator.Load}/{elevator.Capacity}");
                 }
             }
         }
+
         public int GeneratePassengerCount(int floorCount)
         {
             if (floorCount <= 12)
                 return random.Next(100) < 95 ? random.Next(0, 6) : random.Next(7, 9);
-            else return random.Next(100) < 95 ? random.Next(15, 20) : random.Next(9, 11);
+            else return random.Next(100) < 95 ? random.Next(0, 9) : random.Next(9, 11);
         }
 
         public void DisplayInfo()
         {
-            Console.WriteLine($"Количество этажей: {FloorCount}");
+            writer.WriteLine($"Количество этажей: {FloorCount}");
             if (Elevators.Count == 0)
             {
-                Console.WriteLine("В здании нет лифтов.");
+                writer.WriteLine("В здании нет лифтов.");
                 return;
             }
-            Console.WriteLine($"Количество лифтов: {Elevators.Count}\n");
-            Console.WriteLine("Информация о лифтах:\n");
+            writer.WriteLine($"Количество лифтов: {Elevators.Count}\n");
+            writer.WriteLine("Информация о лифтах:\n");
             foreach (var elevator in Elevators)
             {
-                Console.WriteLine(elevator);
+                writer.WriteLine(elevator);
             }
         }
     }
