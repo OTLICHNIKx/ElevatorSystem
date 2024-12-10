@@ -77,23 +77,13 @@ namespace ElevatorSystemTest
             }
 
             // Желанные этажи пассажиров
-            var desiredFloors = Passengers
-                .Where(p => p.IsPickedUp && !p.IsDelivered)
-                .Select(p => p.DesiredFloor)
-                .Distinct()
-                .OrderBy(f => f);
-
-            Console.WriteLine($"ЖЕЛАЕМЫЕ ЭТАЖИ (пассажиры хотят туда): {string.Join(", ", desiredFloors)}");
-
             foreach (var elevator in Elevators)
             {
-                foreach (var floor in desiredFloors)
+                if (elevator.Passengers.Any(p => !p.IsDelivered))
                 {
-                    if (elevator.Passengers.Any(p => p.DesiredFloor == floor))
-                    {
-                        elevator.MoveToFloor(floor);
-                        elevator.DeliverPassengers();
-                    }
+                    Console.WriteLine($"Перед обработкой: Лифт №{elevator.Number}, ЖЕЛАЕМЫЕ ЭТАЖИ: {string.Join(", ", elevator.Passengers.Select(p => p.DesiredFloor).Distinct().OrderBy(f => f))}");
+                    elevator.DeliverPassengers();
+                    Console.WriteLine($"После обработки: Лифт №{elevator.Number}, Загрузка: {elevator.Load}/{elevator.Capacity}");
                 }
             }
         }
@@ -101,7 +91,7 @@ namespace ElevatorSystemTest
         {
             if (floorCount <= 12)
                 return random.Next(100) < 95 ? random.Next(0, 6) : random.Next(7, 9);
-            else return random.Next(100) < 95 ? random.Next(0, 9) : random.Next(9, 11);
+            else return random.Next(100) < 95 ? random.Next(15, 20) : random.Next(9, 11);
         }
 
         public void DisplayInfo()

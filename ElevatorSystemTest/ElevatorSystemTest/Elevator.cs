@@ -28,6 +28,7 @@ namespace ElevatorSystemTest
         {
             if (CurrentFloor != targetFloor)
             {
+                TargetFloor = targetFloor;
                 Console.WriteLine($"Лифт №{Number} движется с {CurrentFloor} на этаж {targetFloor}.");
                 CurrentFloor = targetFloor;
             }
@@ -69,15 +70,59 @@ namespace ElevatorSystemTest
         }
         public void DeliverPassengers()
         {
-            var delivered = Passengers.Where(p => p.DesiredFloor == CurrentFloor).ToList();
-            foreach (var passenger in delivered)
+            // Определяем направление движения
+            bool goingUp = TargetFloor > CurrentFloor;
+
+            // Создаем список всех этажей, которые нужно обработать, и сортируем их по направлению
+            var orderedFloors = Passengers.Where(p => !p.IsDelivered)
+                                          .Select(p => p.DesiredFloor)
+                                          .Distinct()
+                                          .OrderBy(f => goingUp ? f : -f)  // Сортируем по направлению
+                                          .ToList();
+
+            // Выводим информацию о желаемых этажах
+            Console.WriteLine($"Лифт №{Number} обрабатывает желаемые этажи: {string.Join(", ", orderedFloors)}");
+
+            // Обрабатываем этажи
+            while (orderedFloors.Any())
             {
-                passenger.IsDelivered = true; // Помечаем пассажира как доставленного
-                Passengers.Remove(passenger); // Удаляем из текущего списка лифта
-                Load--;
-                Console.WriteLine($"Пассажир {passenger.Id} вышел на этаже {CurrentFloor}. Загрузка: {Load}/{Capacity}");
+                // Проходим по этажам в порядке движения лифта
+                foreach (var floor in orderedFloors.ToList())
+                {
+                    if ((goingUp && floor > CurrentFloor) || (!goingUp && floor < CurrentFloor))
+                    {
+                        MoveToFloor(floor); // Лифт едет на этаж
+
+                        // Доставляем пассажиров на текущем этаже
+                        var deliveredPassengers = Passengers.Where(p => p.DesiredFloor == CurrentFloor && !p.IsDelivered).ToList();
+                        foreach (var passenger in deliveredPassengers)
+                        {
+                            passenger.IsDelivered = true; // Пассажир доставлен
+                            Passengers.Remove(passenger); // Удаляем из лифта
+                            Load--; // Уменьшаем загрузку лифта
+                            Console.WriteLine($"Пассажир {passenger.Id} вышел на этаже {CurrentFloor}. Загрузка: {Load}/{Capacity}");
+                        }
+
+                        // Удаляем этаж после того, как он был обработан
+                        orderedFloors.Remove(floor);
+                    }
+                }
+
+                // Если лифт еще не доставил всех пассажиров, меняем направление
+                if (orderedFloors.Any())
+                {
+                    goingUp = !goingUp; // Меняем направление
+                                        // Пересчитываем этажи для нового направления
+                    orderedFloors = Passengers.Where(p => !p.IsDelivered)
+                                              .Select(p => p.DesiredFloor)
+                                              .Distinct()
+                                              .OrderBy(f => goingUp ? f : -f)
+                                              .ToList();
+                }
             }
         }
+
+
         public override string ToString()
         {
             return $"Лифт №{Number} ({Type}), Вместимость: {Capacity} человек, Загрузка: {Load} человек, Текущий этаж: {CurrentFloor}";
