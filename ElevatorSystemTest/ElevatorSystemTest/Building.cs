@@ -24,55 +24,78 @@ namespace ElevatorSystemTest
             Elevators.Add(elevator);
         }
         // Генерация пассажиров с правильными текущими этажами
-        public void GeneratePassengers(int passengerCount)
+        public void GeneratePassengers(int count)
         {
-            Passengers.Clear(); // Очистим старый список пассажиров
-
-            Console.WriteLine("Генерация пассажиров:");
-            for (int i = 0; i < passengerCount; i++)
+            Passengers.Clear();
+            Random random = new Random();
+            for (int i = 0; i < count; i++)
             {
                 int currentFloor = random.Next(1, FloorCount + 1);
-                int desiredFloor = random.Next(1, FloorCount + 1);
+                int desiredFloor;
+                do
+                {
+                    desiredFloor = random.Next(1, FloorCount + 1);
+                } while (desiredFloor == currentFloor);
 
-                // Создаем нового пассажира с текущим и желаемым этажами
-                var passenger = new Passenger(passengerIdCounter++, currentFloor, desiredFloor);
-                Passengers.Add(passenger);
-                Console.WriteLine(passenger); // Вывод информации о пассажире
+                Passengers.Add(new Passenger(i + 1, currentFloor, desiredFloor)
+                {
+                    IsPickedUp = false,
+                    IsDelivered = false
+                });
+            }
+
+            Console.WriteLine("Сгенерированы пассажиры:");
+            foreach (var passenger in Passengers)
+            {
+                Console.WriteLine(passenger);
             }
         }
 
         public void DispatchElevators()
         {
-            // Сортировка пассажиров по текущему этажу
-            var sortedPassengers = Passengers.OrderBy(p => p.CurrentFloor).ToList();
+            // Текущие этажи пассажиров
+            var currentFloors = Passengers
+                .Where(p => !p.IsPickedUp && !p.IsDelivered)
+                .Select(p => p.CurrentFloor)
+                .Distinct()
+                .OrderBy(f => f);
 
-            // Вывод текущих этажей
-            var currentFloors = sortedPassengers.Select(p => p.CurrentFloor).Distinct().OrderBy(f => f);
             Console.WriteLine($"ТЕКУЩИЕ ЭТАЖИ (пассажиры ждут лифт): {string.Join(", ", currentFloors)}");
 
-            // Распределяем запросы между лифтами
-            foreach (var passenger in sortedPassengers)
+            foreach (var passenger in Passengers.Where(p => !p.IsPickedUp && !p.IsDelivered).ToList())
             {
-                // Найдем лифт с минимальной загрузкой и ближайший к текущему этажу
                 var closestElevator = Elevators
-                    .Where(e => e.Load < e.Capacity) // Проверяем, что лифт не переполнен
-                    .OrderBy(e => Math.Abs(e.CurrentFloor - passenger.CurrentFloor)) // Ближайший лифт
+                    .Where(e => e.Load < e.Capacity)
+                    .OrderBy(e => Math.Abs(e.CurrentFloor - passenger.CurrentFloor))
                     .FirstOrDefault();
 
                 if (closestElevator != null)
                 {
-                    closestElevator.MoveToFloor(Passengers, passenger.CurrentFloor); // Лифт едет на текущий этаж
-                    closestElevator.PickUpPassenger(Passengers, Elevators, passenger.CurrentFloor); // Пассажир садится в лифт
-                }
-                else
-                {
-                    Console.WriteLine("Все лифты заняты. Ожидайте...");
+                    closestElevator.MoveToFloor(passenger.CurrentFloor);
+                    closestElevator.PickUpPassenger(Passengers, Elevators, passenger);
                 }
             }
 
-            // Вывод желаемых этажей
-            var desiredFloors = Passengers.Select(p => p.DesiredFloor).Distinct().OrderBy(f => f);
+            // Желанные этажи пассажиров
+            var desiredFloors = Passengers
+                .Where(p => p.IsPickedUp && !p.IsDelivered)
+                .Select(p => p.DesiredFloor)
+                .Distinct()
+                .OrderBy(f => f);
+
             Console.WriteLine($"ЖЕЛАЕМЫЕ ЭТАЖИ (пассажиры хотят туда): {string.Join(", ", desiredFloors)}");
+
+            foreach (var elevator in Elevators)
+            {
+                foreach (var floor in desiredFloors)
+                {
+                    if (elevator.Passengers.Any(p => p.DesiredFloor == floor))
+                    {
+                        elevator.MoveToFloor(floor);
+                        elevator.DeliverPassengers();
+                    }
+                }
+            }
         }
         public int GeneratePassengerCount(int floorCount)
         {
