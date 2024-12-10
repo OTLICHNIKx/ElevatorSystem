@@ -23,7 +23,7 @@ namespace ElevatorSystemTest
             CurrentFloor = random.Next(1, floorCount + 1); // Генерация случайного этажа
             Load = 0; // Начальная загрузка
         }
-        public void MoveToFloor(int targetFloor)
+        public void MoveToFloor(List<Passenger> passengers, int targetFloor)
         {
             if (CurrentFloor != targetFloor)
             {
@@ -33,6 +33,7 @@ namespace ElevatorSystemTest
                 double timePerFloor = Random.NextDouble() * (2.5 - 1.7) + 1.7;
                 // Общее время = время на этаж * количество этажей
                 double timeToMove = timePerFloor * floorDifference;
+
                 if (CurrentFloor < targetFloor)
                 {
                     Console.WriteLine($"Лифт №{Number} ({Type}) движется с {CurrentFloor} на этаж {targetFloor} (вверх). Время в пути: {timeToMove:F1} секунд.");
@@ -41,11 +42,10 @@ namespace ElevatorSystemTest
                 {
                     Console.WriteLine($"Лифт №{Number} ({Type}) движется с {CurrentFloor} на этаж {targetFloor} (вниз). Время в пути: {timeToMove:F1} секунд.");
                 }
+
+                // Перемещаемся на целевой этаж
                 CurrentFloor = targetFloor;
-            }
-            else
-            {
-                Console.WriteLine($"Лифт №{Number} ({Type}) уже на этаже {targetFloor}.");
+                Console.WriteLine($"Лифт №{Number} прибыл на этаж {targetFloor}.");
             }
         }
 
@@ -75,7 +75,7 @@ namespace ElevatorSystemTest
                     if (nearestElevator != null)
                     {
                         Console.WriteLine($"Запрос передан лифту №{nearestElevator.Number}.");
-                        nearestElevator.MoveToFloor(targetFloor);
+                        nearestElevator.MoveToFloor(passengers, targetFloor);
                         nearestElevator.PickUpPassenger(passengers, allElevators, targetFloor);
                     }
                     else

@@ -46,51 +46,33 @@ namespace ElevatorSystemTest
             // Сортировка пассажиров по текущему этажу
             var sortedPassengers = Passengers.OrderBy(p => p.CurrentFloor).ToList();
 
+            // Вывод текущих этажей
+            var currentFloors = sortedPassengers.Select(p => p.CurrentFloor).Distinct().OrderBy(f => f);
+            Console.WriteLine($"ТЕКУЩИЕ ЭТАЖИ (пассажиры ждут лифт): {string.Join(", ", currentFloors)}");
+
+            // Распределяем запросы между лифтами
             foreach (var passenger in sortedPassengers)
             {
+                // Найдем лифт с минимальной загрузкой и ближайший к текущему этажу
                 var closestElevator = Elevators
-                    .OrderBy(e => Math.Abs(e.CurrentFloor - passenger.CurrentFloor)) // Выбираем ближайший лифт
+                    .Where(e => e.Load < e.Capacity) // Проверяем, что лифт не переполнен
+                    .OrderBy(e => Math.Abs(e.CurrentFloor - passenger.CurrentFloor)) // Ближайший лифт
                     .FirstOrDefault();
 
                 if (closestElevator != null)
                 {
-                    closestElevator.MoveToFloor(passenger.CurrentFloor); // Лифт едет на текущий этаж пассажира
+                    closestElevator.MoveToFloor(Passengers, passenger.CurrentFloor); // Лифт едет на текущий этаж
                     closestElevator.PickUpPassenger(Passengers, Elevators, passenger.CurrentFloor); // Пассажир садится в лифт
                 }
-            }
-
-            // Теперь обрабатываем пассажиров с учётом направления движения лифта
-            foreach (var elevator in Elevators)
-            {
-                // Если лифт движется вниз
-                if (elevator.CurrentFloor > elevator.TargetFloor)
+                else
                 {
-                    var passengersGoingDown = Passengers
-                        .Where(p => p.CurrentFloor > elevator.CurrentFloor)
-                        .OrderByDescending(p => p.CurrentFloor) // Пассажиры по убыванию этажей
-                        .ToList();
-
-                    foreach (var passenger in passengersGoingDown)
-                    {
-                        elevator.MoveToFloor(passenger.CurrentFloor); // Лифт едет на этаж пассажира
-                        elevator.PickUpPassenger(Passengers, Elevators, passenger.CurrentFloor); // Пассажир садится в лифт
-                    }
-                }
-                // Если лифт движется вверх
-                else if (elevator.CurrentFloor < elevator.TargetFloor)
-                {
-                    var passengersGoingUp = Passengers
-                        .Where(p => p.CurrentFloor > elevator.CurrentFloor)
-                        .OrderBy(p => p.CurrentFloor) // Пассажиры по возрастанию этажей
-                        .ToList();
-
-                    foreach (var passenger in passengersGoingUp)
-                    {
-                        elevator.MoveToFloor(passenger.CurrentFloor); // Лифт едет на этаж пассажира
-                        elevator.PickUpPassenger(Passengers, Elevators, passenger.CurrentFloor); // Пассажир садится в лифт
-                    }
+                    Console.WriteLine("Все лифты заняты. Ожидайте...");
                 }
             }
+
+            // Вывод желаемых этажей
+            var desiredFloors = Passengers.Select(p => p.DesiredFloor).Distinct().OrderBy(f => f);
+            Console.WriteLine($"ЖЕЛАЕМЫЕ ЭТАЖИ (пассажиры хотят туда): {string.Join(", ", desiredFloors)}");
         }
         public int GeneratePassengerCount(int floorCount)
         {
