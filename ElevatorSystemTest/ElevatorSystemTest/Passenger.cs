@@ -9,7 +9,6 @@ namespace ElevatorSystemTest
     public class Passenger
     {
         public int Id { get; set; }
-        public int Floor { get; set; } // Этаж, где появился пассажир
         public int CurrentFloor { get; set; } // Этаж, где находится пассажир
         public int DesiredFloor { get; set; } // Желаемый этаж
         public bool IsDelivered { get; set; } // Флаг: пассажир доставлен

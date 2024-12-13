@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "C:\\Labs\\ElevatorPart3\\Elevator\\ElevatorSystem\\ElevatorSystemTest\\ElevatorSystemTest\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7786A0E8-55A7-423A-9049-AD855921867B}|ElevatorSystemTest.csproj|c:\\labs\\elevatorpart3\\elevator\\elevatorsystem\\elevatorsystemtest\\elevatorsystemtest\\building.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7786A0E8-55A7-423A-9049-AD855921867B}|ElevatorSystemTest.csproj|solutionrelative:building.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{7786A0E8-55A7-423A-9049-AD855921867B}|ElevatorSystemTest.csproj|c:\\labs\\elevatorpart3\\elevator\\elevatorsystem\\elevatorsystemtest\\elevatorsystemtest\\elevator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7786A0E8-55A7-423A-9049-AD855921867B}|ElevatorSystemTest.csproj|solutionrelative:elevator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7786A0E8-55A7-423A-9049-AD855921867B}|ElevatorSystemTest.csproj|c:\\labs\\elevatorpart3\\elevator\\elevatorsystem\\elevatorsystemtest\\elevatorsystemtest\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7786A0E8-55A7-423A-9049-AD855921867B}|ElevatorSystemTest.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7786A0E8-55A7-423A-9049-AD855921867B}|ElevatorSystemTest.csproj|c:\\labs\\elevatorpart3\\elevator\\elevatorsystem\\elevatorsystemtest\\elevatorsystemtest\\elevatorsimulation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -19,8 +19,8 @@
       "RelativeMoniker": "D:0:0:{7786A0E8-55A7-423A-9049-AD855921867B}|ElevatorSystemTest.csproj|solutionrelative:passenger.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7786A0E8-55A7-423A-9049-AD855921867B}|ElevatorSystemTest.csproj|c:\\labs\\elevatorpart3\\elevator\\elevatorsystem\\elevatorsystemtest\\elevatorsystemtest\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7786A0E8-55A7-423A-9049-AD855921867B}|ElevatorSystemTest.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7786A0E8-55A7-423A-9049-AD855921867B}|ElevatorSystemTest.csproj|c:\\labs\\elevatorpart3\\elevator\\elevatorsystem\\elevatorsystemtest\\elevatorsystemtest\\building.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7786A0E8-55A7-423A-9049-AD855921867B}|ElevatorSystemTest.csproj|solutionrelative:building.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,7 +30,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Bookmark",
@@ -38,13 +38,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 4,
               "Title": "Building.cs",
               "DocumentMoniker": "C:\\Labs\\ElevatorPart3\\Elevator\\ElevatorSystem\\ElevatorSystemTest\\ElevatorSystemTest\\Building.cs",
               "RelativeDocumentMoniker": "Building.cs",
               "ToolTip": "C:\\Labs\\ElevatorPart3\\Elevator\\ElevatorSystem\\ElevatorSystemTest\\ElevatorSystemTest\\Building.cs",
               "RelativeToolTip": "Building.cs",
-              "ViewState": "AgIAAAQAAAAAAAAAAAAswBcAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAF0AAAAAAAAAAAAywHQAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-09T12:54:23.421Z",
               "EditorCaption": ""
@@ -57,7 +57,7 @@
               "RelativeDocumentMoniker": "ElevatorSimulation.cs",
               "ToolTip": "C:\\Labs\\ElevatorPart3\\Elevator\\ElevatorSystem\\ElevatorSystemTest\\ElevatorSystemTest\\ElevatorSimulation.cs",
               "RelativeToolTip": "ElevatorSimulation.cs",
-              "ViewState": "AgIAAC4AAAAAAAAAAAAAADIAAAArAAAAAAAAAA==",
+              "ViewState": "AgIAACoAAAAAAAAAAAAUwEMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-10T19:25:05.265Z",
               "EditorCaption": ""
@@ -70,33 +70,33 @@
               "RelativeDocumentMoniker": "Passenger.cs",
               "ToolTip": "C:\\Labs\\ElevatorPart3\\Elevator\\ElevatorSystem\\ElevatorSystemTest\\ElevatorSystemTest\\Passenger.cs",
               "RelativeToolTip": "Passenger.cs",
-              "ViewState": "AgIAAA8AAAAAAAAAAAA9wBUAAAAOAAAAAAAAAA==",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAswCMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-09T12:53:59.354Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "Elevator.cs",
               "DocumentMoniker": "C:\\Labs\\ElevatorPart3\\Elevator\\ElevatorSystem\\ElevatorSystemTest\\ElevatorSystemTest\\Elevator.cs",
               "RelativeDocumentMoniker": "Elevator.cs",
               "ToolTip": "C:\\Labs\\ElevatorPart3\\Elevator\\ElevatorSystem\\ElevatorSystemTest\\ElevatorSystemTest\\Elevator.cs",
               "RelativeToolTip": "Elevator.cs",
-              "ViewState": "AgIAAAcAAAAAAAAAAAAiwAgAAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAwwDMAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-09T12:53:38.268Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 1,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Labs\\ElevatorPart3\\Elevator\\ElevatorSystem\\ElevatorSystemTest\\ElevatorSystemTest\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
               "ToolTip": "C:\\Labs\\ElevatorPart3\\Elevator\\ElevatorSystem\\ElevatorSystemTest\\ElevatorSystemTest\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAcAAAAAAAAAAAAQwBEAAAAuAAAAAAAAAA==",
+              "ViewState": "AgIAABMAAAAAAAAAAAAIwC4AAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-09T12:46:46.236Z",
               "EditorCaption": ""

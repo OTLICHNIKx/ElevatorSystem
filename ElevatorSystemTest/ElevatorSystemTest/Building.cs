@@ -10,7 +10,6 @@ namespace ElevatorSystemTest
     public class Building
     {
         public int FloorCount { get; set; } // Количество этажей
-        private int passengerIdCounter = 1; // Глобальный счетчик пассажиров
         public List<Elevator> Elevators { get; set; } // Список лифтов
         private Random random = new Random(); // Генератор случайных чисел
         public List<Passenger> Passengers { get; private set; } = new List<Passenger>();
